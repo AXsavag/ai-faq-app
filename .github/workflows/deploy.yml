@@ -1,0 +1,45 @@
+name: Deploy AI FAQ App to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      deployments: write
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # --- Install Dependencies Step (CLEANED UP) ---
+      - name: Install Dependencies
+        # Runs in the root of the checked out repo
+        run: npm install
+
+      # --- Build Project Step (CLEANED UP) ---
+      - name: Build Project
+        run: npm run build 
+
+      # --- DEPLOYMENT (Final Directory Fix) ---
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          
+          projectName: ai-faq-assistant 
+          
+          # We need to change the final directory path to the correct location 
+          # from the root of the checked-out repository.
+          directory: ./.vercel/output/static
