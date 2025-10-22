@@ -9,12 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
-    # *** SET THE DEFAULT WORKING DIRECTORY FOR ALL STEPS HERE ***
-    # This assumes the checkout action creates one single subfolder with the repo name.
-    defaults:
-      run:
-        working-directory: ./ai-faq-app 
-        
+    # We will remove the defaults: run: working-directory to use a custom path later
+    
     permissions:
       contents: read
       deployments: write
@@ -27,17 +23,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Debug Current Directory
-        run: pwd && ls -a
-      # --- Install Dependencies Step (Now running inside ./ai-faq-app) ---
+
+      # =================================================================
+      # *** NEW DEBUG STEP ***
+      # This step will print the current location and contents of the folder.
+      # Look for the "package.json" file in the log to find its true path.
+      # =================================================================
+      - name: Find the Correct Working Directory
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in current directory:"
+          ls -aR 
+          
+      # The remaining steps are currently commented out to allow the debug log to run and fail cleanly
       - name: Install Dependencies
-        run: npm install
+        # This step will fail, but the one before it should give us the answer!
+        run: echo "Skipping install for debug..." && exit 0
 
-      # --- Build Project Step ---
       - name: Build Project
-        run: npm run build 
-
-      # --- DEPLOYMENT ---
+        run: echo "Skipping build for debug..." && exit 0
+        
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -45,7 +51,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           
           projectName: ai-faq-assistant 
-          
-          # The output directory must be relative to the new working-directory path
-          # which is: ./ai-faq-app/.vercel/output/static
-          directory: ./.vercel/output/static
+          directory: ./dist # Temporary path
