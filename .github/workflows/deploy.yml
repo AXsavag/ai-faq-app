@@ -9,10 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
-    # Set the default working directory to the subfolder where your package.json lives
+    # *** CORRECTED WORKING DIRECTORY PATH ***
+    # This tells the system to step into the nested project folder.
     defaults:
       run:
-        working-directory: ./ai-faq-app 
+        working-directory: ./ai-faq-app/ai-faq-app
         
     permissions:
       contents: read
@@ -27,21 +28,22 @@ jobs:
         with:
           node-version: '20'
 
+      # --- Install Dependencies Step (Should now find package.json) ---
       - name: Install Dependencies
         run: npm install
 
+      # --- Build Project Step ---
       - name: Build Project
         run: npm run build 
 
       # --- DEPLOYMENT ---
-      - name: Publish to Cloudflare Pages (Final Attempt)
+      - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           
-          # Project Name
           projectName: ai-faq-assistant-final 
           
-          # COMMON NEXT.JS OUTPUT: We are trying the standard Next.js static output folder
-          directory: ./.next/static
+          # The output directory relative to the new working directory (./ai-faq-app/ai-faq-app)
+          directory: ./.vercel/output/static
