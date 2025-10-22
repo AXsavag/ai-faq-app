@@ -27,7 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
+      - name: Debug Current Directory
+        run: pwd && ls -a
       # --- Install Dependencies Step (Now running inside ./ai-faq-app) ---
       - name: Install Dependencies
         run: npm install
