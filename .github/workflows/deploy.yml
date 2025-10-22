@@ -9,8 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
-    # We will remove the defaults: run: working-directory to use a custom path later
-    
+    # Set the default working directory to the subfolder where your package.json lives
+    defaults:
+      run:
+        working-directory: ./ai-faq-app 
+        
     permissions:
       contents: read
       deployments: write
@@ -24,31 +27,21 @@ jobs:
         with:
           node-version: '20'
 
-      # =================================================================
-      # *** NEW DEBUG STEP ***
-      # This step will print the current location and contents of the folder.
-      # Look for the "package.json" file in the log to find its true path.
-      # =================================================================
-      - name: Find the Correct Working Directory
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Files in current directory:"
-          ls -aR 
-          
-      # The remaining steps are currently commented out to allow the debug log to run and fail cleanly
       - name: Install Dependencies
-        # This step will fail, but the one before it should give us the answer!
-        run: echo "Skipping install for debug..." && exit 0
+        run: npm install
 
       - name: Build Project
-        run: echo "Skipping build for debug..." && exit 0
-        
-      - name: Publish to Cloudflare Pages
+        run: npm run build 
+
+      # --- DEPLOYMENT ---
+      - name: Publish to Cloudflare Pages (Final Attempt)
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           
-          projectName: ai-faq-assistant 
-          directory: ./dist # Temporary path
+          # Project Name
+          projectName: ai-faq-assistant-final 
+          
+          # COMMON NEXT.JS OUTPUT: We are trying the standard Next.js static output folder
+          directory: ./.next/static
