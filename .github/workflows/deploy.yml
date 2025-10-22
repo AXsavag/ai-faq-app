@@ -9,6 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
+    # *** SET THE DEFAULT WORKING DIRECTORY FOR ALL STEPS HERE ***
+    defaults:
+      run:
+        working-directory: ./ai-faq-app
+        
     permissions:
       contents: read
       deployments: write
@@ -22,16 +27,15 @@ jobs:
         with:
           node-version: '20'
 
-      # --- Install Dependencies Step (CLEANED UP) ---
+      # --- Install Dependencies Step ---
       - name: Install Dependencies
-        # Runs in the root of the checked out repo
         run: npm install
 
-      # --- Build Project Step (CLEANED UP) ---
+      # --- Build Project Step ---
       - name: Build Project
         run: npm run build 
 
-      # --- DEPLOYMENT (Final Directory Fix) ---
+      # --- DEPLOYMENT ---
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -40,6 +44,9 @@ jobs:
           
           projectName: ai-faq-assistant 
           
-          # We need to change the final directory path to the correct location 
-          # from the root of the checked-out repository.
-          directory: ./.vercel/output/static
+          # The output directory should now be relative to the new working-directory path
+          directory: ./.vercel/output/static 
+          
+          # Since the working directory is now inside the subfolder, this deployment directory 
+          # must be relative to that (which the build command should create).
+          # If this step fails, the error log should tell us the correct output folder name!
