@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     
     # *** CORRECTED WORKING DIRECTORY PATH ***
-    # This tells the system to step into the nested project folder.
+    # This assumes the base folder is what the runner sees as "ai-faq-app"
     defaults:
       run:
-        working-directory: ./ai-faq-app/ai-faq-app
+        working-directory: ./ai-faq-app 
         
     permissions:
       contents: read
@@ -45,5 +45,5 @@ jobs:
           
           projectName: ai-faq-assistant-final 
           
-          # The output directory relative to the new working directory (./ai-faq-app/ai-faq-app)
+          # The output directory relative to the new working directory (./ai-faq-app)
           directory: ./.vercel/output/static
