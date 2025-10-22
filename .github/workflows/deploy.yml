@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     
     # *** SET THE DEFAULT WORKING DIRECTORY FOR ALL STEPS HERE ***
+    # This assumes the checkout action creates one single subfolder with the repo name.
     defaults:
       run:
-        working-directory: ./ai-faq-app
+        working-directory: ./ai-faq-app 
         
     permissions:
       contents: read
@@ -27,7 +28,7 @@ jobs:
         with:
           node-version: '20'
 
-      # --- Install Dependencies Step ---
+      # --- Install Dependencies Step (Now running inside ./ai-faq-app) ---
       - name: Install Dependencies
         run: npm install
 
@@ -44,9 +45,6 @@ jobs:
           
           projectName: ai-faq-assistant 
           
-          # The output directory should now be relative to the new working-directory path
-          directory: ./.vercel/output/static 
-          
-          # Since the working directory is now inside the subfolder, this deployment directory 
-          # must be relative to that (which the build command should create).
-          # If this step fails, the error log should tell us the correct output folder name!
+          # The output directory must be relative to the new working-directory path
+          # which is: ./ai-faq-app/.vercel/output/static
+          directory: ./.vercel/output/static
