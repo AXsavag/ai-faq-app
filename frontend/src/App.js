@@ -17,11 +17,12 @@ function App() {
   ];
 
   async function ask(q) {
+    // Use the passed question 'q' or the state 'question'
     const userQuestion = (q || question || "").toString();
     if (!userQuestion.trim()) return;
 
     setLoading(true);
-    setAnswer("");
+    setAnswer(""); // Clear previous answer
 
     try {
       const res = await axios.post(
@@ -36,7 +37,10 @@ function App() {
       setAnswer("❌ Error fetching response. Please try again.");
     } finally {
       setLoading(false);
-      setQuestion("");
+      // Only clear the input field if the user did NOT click a suggestion
+      if (!q) {
+        setQuestion("");
+      }
     }
   }
 
@@ -53,16 +57,16 @@ function App() {
           <button
             key={i}
             onClick={() => ask(text)}
-            className="block text-left w-full px-3 py-2 rounded-lg hover:bg-blue-50 transition"
-            style={{ background: "transparent", border: "none", color: "#1f2937" }}
+            className="block text-left w-full px-3 py-2 rounded-lg hover:bg-slate-200 transition-colors"
+            style={{ background: "transparent", border: "none", color: "#334155" /* slate-700 */ }}
           >
             {text}
           </button>
         );
       } else {
-        // Use ReactMarkdown for nicer formatting (keeps plain text safe)
+        // Use ReactMarkdown for nicer formatting
         return (
-          <div key={i} className="prose prose-sm text-gray-800 mb-2">
+          <div key={i} className="prose prose-sm text-slate-800 mb-2 max-w-none">
             <ReactMarkdown>{line}</ReactMarkdown>
           </div>
         );
@@ -71,69 +75,82 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6">
+    // Increased vertical padding (py-12 or py-20) for more space
+    <div className="min-h-screen flex flex-col items-center p-6 sm:p-10 py-12 sm:py-20">
       <div className="w-full max-w-2xl">
-        <header className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">🤖 Business FAQ Assistant</h1>
-          <p className="text-gray-600 mt-2">
-            Ask business questions or pick one of the suggestions below.
+        <header className="text-center mb-8">
+          {/* Removed emoji, increased text size and used softer colors */}
+          <h1 className="text-4xl font-bold text-slate-800">
+            Business FAQ Assistant
+          </h1>
+          <p className="text-slate-500 mt-3 text-lg">
+            Ask a question or pick one of the suggestions below.
           </p>
         </header>
 
-        <section className="flex flex-wrap gap-2 mb-6 justify-center">
+        {/* Increased gap between buttons */}
+        <section className="flex flex-wrap gap-3 mb-8 justify-center">
           {suggestions.map((s, idx) => (
             <button
               key={idx}
               onClick={() => ask(s)}
-              className="suggestion-btn"
+              className="suggestion-btn" // This class is now styled in index.css
             >
               {s}
             </button>
           ))}
         </section>
 
-        <main className="bg-white rounded-xl shadow p-6">
+        {/* Main card: Softer shadow, more padding, slightly more rounded */}
+        <main className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               ask(question);
             }}
-            className="flex gap-2 mb-4"
+            className="flex flex-col sm:flex-row gap-3 mb-4"
           >
             <input
               type="text"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Type your question here..."
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              // Updated input styling: softer border and focus ring
+              className="flex-1 border border-slate-300 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <button
               type="submit"
               disabled={loading}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow"
+              // Updated button: Changed to a professional 'indigo' color, larger, and matches input style
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium shadow-sm disabled:opacity-50 transition-colors"
             >
               {loading ? "Thinking..." : "Ask"}
             </button>
           </form>
 
           {/* Answer area */}
-          <div>
+          <div className="mt-6">
             {answer ? (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              // Updated answer box: Softer colors
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 {renderAnswer()}
               </div>
             ) : (
-              <div className="text-gray-500">Answers will appear here.</div>
+              // Updated placeholder text color
+              <div className="text-slate-500 text-center py-4">
+                Answers will appear here.
+              </div>
             )}
           </div>
         </main>
 
-        <footer className="mt-6 text-center">
+        <footer className="mt-8 text-center">
+          {/* Footer link: Made it subtle and clean, removed button look */}
           <a
             href="mailto:muktaribro13@gmail.com"
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
+            className="font-medium text-slate-500 hover:text-slate-700 transition-colors"
           >
-            📩 Contact Us
+            Contact Us
           </a>
         </footer>
       </div>
