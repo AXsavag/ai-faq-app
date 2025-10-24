@@ -4,7 +4,8 @@ import ReactMarkdown from "react-markdown";
 import "./index.css";
 
 function App() {
-  const [question, setQuestion] = [useState("");
+  // This line is now fixed (I removed the extra '[')
+  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -145,7 +146,6 @@ function App() {
         </main>
 
         <footer className="mt-8 text-center">
-          {/* === THIS IS THE CHANGE === */}
           {/* Styled the link to look like a button so it's visible */}
           <a
             href="mailto:muktaribro13@gmail.com"
