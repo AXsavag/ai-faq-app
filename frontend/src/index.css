@@ -5,20 +5,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set the new font and a clean, light gray background */
+/* === NEW BACKGROUND === */
+/* We are bringing back the soft gradient from your original screenshot */
 body {
   font-family: 'Inter', sans-serif;
-  @apply bg-slate-50 text-slate-800;
+  @apply bg-gradient-to-br from-blue-50 to-purple-100 text-slate-800;
 }
 
-/* Make suggestion buttons look like clean, clickable suggestions
-  instead of heavy blue buttons.
+/* === NEW BUTTON STYLE (Compromise) === */
+/*
+  This is a new style.
+  A soft blue background, with darker blue text.
+  This adds color back in a very clean, modern way.
 */
 .suggestion-btn {
-  @apply bg-white text-slate-700 px-4 py-2 rounded-lg text-sm border border-slate-300 font-medium;
-  @apply transition-colors duration-150;
+  @apply bg-blue-100 text-blue-700 px-4 py-2 rounded-lg text-sm border border-blue-200 font-medium;
+  @apply transition-all duration-150;
 }
 
+/* A slightly darker blue on hover */
 .suggestion-btn:hover {
-  @apply bg-slate-100 border-slate-400;
+  @apply bg-blue-200 border-blue-300 shadow-sm;
 }
