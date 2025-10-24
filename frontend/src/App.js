@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import "./index.css";
 
 function App() {
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = [useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -145,10 +145,11 @@ function App() {
         </main>
 
         <footer className="mt-8 text-center">
-          {/* Footer link: Made it subtle and clean, removed button look */}
+          {/* === THIS IS THE CHANGE === */}
+          {/* Styled the link to look like a button so it's visible */}
           <a
             href="mailto:muktaribro13@gmail.com"
-            className="font-medium text-slate-500 hover:text-slate-700 transition-colors"
+            className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium shadow-sm transition-colors"
           >
             Contact Us
           </a>
@@ -159,3 +160,4 @@ function App() {
 }
 
 export default App;
+
