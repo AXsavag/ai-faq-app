@@ -1,17 +1,24 @@
+/* Import a modern, clean font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom overrides to make sure text and buttons are visible */
+/* Set the new font and a clean, light gray background */
 body {
-  @apply bg-gradient-to-br from-blue-50 to-purple-100 text-gray-900;
+  font-family: 'Inter', sans-serif;
+  @apply bg-slate-50 text-slate-800;
 }
 
-/* make suggestion buttons consistent */
+/* Make suggestion buttons look like clean, clickable suggestions
+  instead of heavy blue buttons.
+*/
 .suggestion-btn {
-  @apply bg-blue-600 text-white px-4 py-2 rounded-full text-sm shadow-md;
+  @apply bg-white text-slate-700 px-4 py-2 rounded-lg text-sm border border-slate-300 font-medium;
+  @apply transition-colors duration-150;
 }
 
 .suggestion-btn:hover {
-  @apply bg-blue-700;
+  @apply bg-slate-100 border-slate-400;
 }
